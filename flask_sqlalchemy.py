@@ -14,7 +14,7 @@ import re
 import sys
 import time
 import functools
-from flask.ext.sqlalchemy import sqlalchemy
+import sqlalchemy
 from math import ceil
 from functools import partial
 from flask import _request_ctx_stack, abort
