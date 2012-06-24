@@ -82,7 +82,8 @@ login_manager.refresh_view = "reauth"
 
 @login_manager.user_loader
 def load_user(id):
-    return USERS.get(int(id))
+	user = User.query.filter_by(id=id).first()
+	return UserLogin(user)#USERS.get(int(id))
 
 
 login_manager.setup_app(app)
