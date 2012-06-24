@@ -60,5 +60,5 @@ body {
 }
 
 .typekit-badge {
-    display:none;
+    display:none !important;
 }
