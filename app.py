@@ -31,10 +31,7 @@ class User(db.Model):
     def __init__(self, username, email, password):
         self.username = username
         self.email = email
-
-		# To validate password later, use bcrypt.check_password_hash(dbpw, pw).
         self.password = password
-
         self.active = True
 
     def __repr__(self):
@@ -70,14 +67,22 @@ login_manager.refresh_view = "reauth"
 @login_manager.user_loader
 def load_user(id):
 	user = User.query.filter_by(id=id).first()
-	return UserLogin(user)#USERS.get(int(id))
+	return UserLogin(user)
 
 
 login_manager.setup_app(app)
 
-@app.route("/")
+@app.route("/welcome")
 def index():
     return render_template("index.html")
+
+
+@app.route("/")
+def dashboard():
+	if current_user:
+		return render_template("dashboard.html")
+	else:
+		return redirect(url_for("index"))
 
 
 @app.route('/hello')
