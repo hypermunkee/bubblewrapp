@@ -165,6 +165,12 @@ def signup():
 				db.session.add(user)
 				db.session.commit()
 
+				# Log the user in right after sign-up.
+				if login_user(UserLogin(user)):
+					return redirect(url_for("dashboard"))
+				else:
+					return redirect(url_for("index"))
+
 #		flash("Yo you just gotcha self a lil email at %s!" % email)
 #		msg = Message("Hello",
 #			sender=("Bubblewrapp Admin", "noreply@bubblewrapp.com"),
