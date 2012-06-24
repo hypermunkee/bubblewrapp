@@ -25,9 +25,32 @@ db = SQLAlchemy(app)
 class Bundle(db.Model):
 	__tablename__ = 'bundle'
 	id = db.Column(db.Integer, primary_key=True)
+	title = db.String(150)
 	description = db.Column(db.Text)
-	slug = db.Column(db.String(60))
-	children = relationship("Media")
+	hash = db.Column(db.String(60))
+	children = relationship('Media')
+
+	def __init__(self, title, description):
+		self.title = title
+		self.description = description
+		self.hash = _GenerateHash()
+
+	def __repr__(self):
+		return '<Bundle ID %r: %r>' % (self.id, self.title)
+
+	def _GenerateHash(self):
+		char_set = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890-_';
+		hash = '';
+		for count in xrange(3):
+			rand_num = random.randint(0, 63)
+			hash += char_set[rand_num]
+
+		# If the generated hash has already been used, try again.
+		existing_hash = Bundle.query.filter_by(hash=hash).first()
+		if existing_hash:
+			return _GenerateHash()
+
+		return hash
 
 
 class Media(db.Model):
@@ -37,6 +60,15 @@ class Media(db.Model):
 	url = db.Column(db.String(120))
 	thumburl = db.Column(db.String(120))
 	type = db.Column(db.Integer)
+
+	def __init__(self, bundle_id, url, thumburl, type):
+		self.bundle_id = bundle_id
+		self.url = url
+		self.thumburl = thumburl
+		self.type = type
+
+	def __repr__(self):
+		return '<Media ID %r: %r>' % (self.id, self.url)
 
 
 class MediaType:
