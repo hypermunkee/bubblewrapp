@@ -45,3 +45,13 @@ body {
   margin: 10px;
   float: left;
 }
+
+.rounded-image {
+    float: left;
+	-webkit-border-radius: 20px;
+	-moz-border-radius: 20px;
+	border-radius: 20px;
+	-webkit-box-shadow: #000 0 2px 10px;
+	-moz-box-shadow: #000 0 2px 10px;
+	box-shadow: #000 0 2px 10px;
+}

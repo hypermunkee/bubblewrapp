@@ -8,6 +8,12 @@
 <h1>Latest bundles</h1>
 
 <div id="container">
+
+    <p class="rounded-image" style="background-image: url(http://media-cache-ec4.pinterest.com/upload/280067670547265469_ZSv1vyTg.jpg);">
+        <a href="#">
+            <img src="http://media-cache-ec4.pinterest.com/upload/280067670547265469_ZSv1vyTg.jpg" style="opacity: 0;" alt="Beach">
+        </a>
+    </p>
     <div class="item"><img src="http://media-cache-ec4.pinterest.com/upload/280067670547265469_ZSv1vyTg.jpg" /></div>
     <div class="item"><img src="http://media-cache-ec1.pinterest.com/upload/24910604159011478_Ul8iLdoZ.jpg" /></div>
     <div class="item"><img src="http://media-cache-ec0.pinterest.com/upload/234820568041266169_xdteJlbL.jpg" /></div>
@@ -18,13 +24,21 @@
 </div>
 
 <script type="text/javascript">
+    
+    $(function(){
+        $('#container').masonry({
+            // options
+            itemSelector : '.item',
+            columnWidth : 240
+        });
+    });
     var $container = $('#container');
-$container.imagesLoaded(function(){
-  $container.masonry({
-    itemSelector : '.item',
-    columnWidth : 240
-  });
-});
+    $container.imagesLoaded(function(){
+        $container.masonry({
+            itemSelector : '.item',
+            columnWidth : 240
+        });
+    });
 </script>
 
 {% else %}
