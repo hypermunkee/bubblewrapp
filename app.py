@@ -26,6 +26,7 @@ class User(db.Model):
     username = db.Column(db.String(80), unique=True)
     email = db.Column(db.String(120), unique=True)
     password = db.Column(db.String(60), unique=False)
+    active = db.Column(db.Boolean)
 
     def __init__(self, username, email, password):
         self.username = username
@@ -34,31 +35,38 @@ class User(db.Model):
 		# To validate password later, use bcrypt.check_password_hash(dbpw, pw).
         self.password = password
 
+        self.active = True
+
     def __repr__(self):
         return '<User %r>' % self.username
 
 
 class UserLogin(UserMixin):
-    def __init__(self, name, id, active=True):
-        self.name = name
-        self.id = id
-        self.active = active
-    
-    def is_active(self):
-        return self.active
+	def __init__(self, user):
+		self.name = user.username
+		self.id = user.id
+		self.active = user.active
+
+#    def __init__(self, name, id, active=True):
+#        self.name = name
+#        self.id = id
+#        self.active = active
+
+	def is_active(self):
+		return self.active
 
 
 class Anonymous(AnonymousUser):
     name = u"Anonymous"
 
 
-USERS = {
-    1: UserLogin(u"Notch", 1),
-    2: UserLogin(u"Steve", 2),
-    3: UserLogin(u"Creeper", 3, False),
-}
+#USERS = {
+#    1: UserLogin(u"Notch", 1),
+#    2: UserLogin(u"Steve", 2),
+#    3: UserLogin(u"Creeper", 3, False),
+#}
 
-USER_NAMES = dict((u.name, u) for u in USERS.itervalues())
+#USER_NAMES = dict((u.name, u) for u in USERS.itervalues())
 
 SECRET_KEY = "yeah, not actually a secret"
 DEBUG = True
@@ -94,9 +102,10 @@ def hello(name=None):
 def login():
     if request.method == "POST" and "username" in request.form:
         username = request.form["username"]
-        if username in USER_NAMES:
+        user = User.query.filter_by(username=username).first()
+        if user:#username in USER_NAMES:
             remember = request.form.get("remember", "no") == "yes"
-            if login_user(USER_NAMES[username], remember=remember):
+            if login_user(UserLogin(user), remember=remember):#USER_NAMES[username], remember=remember):
                 flash("Logged in!")
                 return redirect(request.args.get("next") or url_for("index"))
             else:
