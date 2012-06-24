@@ -8,9 +8,10 @@ from flask.ext.bcrypt import Bcrypt
 from flask.ext.login import (LoginManager, current_user, login_required,
                             login_user, logout_user, UserMixin, AnonymousUser,
                             confirm_login, fresh_login_required)
-from flask.ext.mail import Mail
-from flask.ext.mail import Message
+#from flask.ext.mail import Mail
+#from flask.ext.mail import Message
 from flask.ext.sqlalchemy import SQLAlchemy
+from sqlalchemy.orm import relationship
 from flask import render_template
 
 
@@ -18,7 +19,29 @@ app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'postgres://qdvcwjhjzx:KzsY5P8JzVuCY60RDmQ1@ec2-107-20-152-105.compute-1.amazonaws.com/qdvcwjhjzx'
 bcrypt = Bcrypt(app)
 db = SQLAlchemy(app)
-mail = Mail(app)
+#mail = Mail(app)
+
+
+class Bundle(db.Model):
+	__tablename__ = 'bundle'
+	id = db.Column(db.Integer, primary_key=True)
+	description = db.Column(db.Text)
+	slug = db.Column(db.String(60))
+	children = relationship("Media")
+
+
+class Media(db.Model):
+	__tablename__ = 'media'
+	id = db.Column(db.Integer, primary_key=True)
+	bundle_id = db.Column(db.Integer, db.ForeignKey('bundle.id'))
+	url = db.Column(db.String(120))
+	thumburl = db.Column(db.String(120))
+	type = db.Column(db.Integer)
+
+
+class MediaType:
+    IMAGE=1
+    VIDEO=2
 
 
 class User(db.Model):
