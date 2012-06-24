@@ -2,6 +2,7 @@
 
 import flask
 import os
+import random
 
 from flask import Flask, request, render_template, redirect, url_for, flash
 from flask.ext.bcrypt import Bcrypt
@@ -31,7 +32,8 @@ class Bundle(db.Model):
 	hash = db.Column(db.String(60))
 	children = relationship('Media')
 
-	def __init__(self, title, description):
+	def __init__(self, bundle_id, title, description):
+		self.bundle_id = bundle_id
 		self.title = title
 		self.description = description
 		self.hash = self._GenerateHash()
