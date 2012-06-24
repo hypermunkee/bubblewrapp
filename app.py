@@ -8,8 +8,8 @@ from flask.ext.bcrypt import Bcrypt
 from flask.ext.login import (LoginManager, current_user, login_required,
                             login_user, logout_user, UserMixin, AnonymousUser,
                             confirm_login, fresh_login_required)
-from flask.ext.mail import Mail
-from flask.ext.mail import Message
+from flask.ext.sendmail import Mail
+from flask.ext.sendmail import Message
 from flask.ext.sqlalchemy import SQLAlchemy
 from flask import render_template
 
