@@ -16,11 +16,15 @@ from sqlalchemy.orm import relationship
 from flask import render_template
 
 
+IN_MEMORY_DB = True
+
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgres://qdvcwjhjzx:KzsY5P8JzVuCY60RDmQ1@ec2-107-20-152-105.compute-1.amazonaws.com/qdvcwjhjzx'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///:memory:' if IN_MEMORY_DB else 'postgres://qdvcwjhjzx:KzsY5P8JzVuCY60RDmQ1@ec2-107-20-152-105.compute-1.amazonaws.com/qdvcwjhjzx'
 bcrypt = Bcrypt(app)
 db = SQLAlchemy(app)
 #mail = Mail(app)
+
+db.create_all()
 
 
 class Bundle(db.Model):
