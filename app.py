@@ -1,60 +1,31 @@
 import os
 
-from flask import Flask, redirect, url_for, session, request
-from flaskext.oauth import OAuth
-
-
-SECRET_KEY = 'development key'
-DEBUG = True
-FACEBOOK_APP_ID = '148264965297954'
-FACEBOOK_APP_SECRET = '4a82e7ae7863152a973e68d9d483064a'
+from flask import Flask
+from flask.ext.sqlalchemy import SQLAlchemy
+from flask import render_template
 
 
 app = Flask(__name__)
-app.debug = DEBUG
-app.secret_key = SECRET_KEY
-oauth = OAuth()
-
-facebook = oauth.remote_app('facebook',
-    base_url='https://graph.facebook.com/',
-    request_token_url=None,
-    access_token_url='/oauth/access_token',
-    authorize_url='https://www.facebook.com/dialog/oauth',
-    consumer_key=FACEBOOK_APP_ID,
-    consumer_secret=FACEBOOK_APP_SECRET,
-    request_token_params={'scope': 'email'}
-)
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgres://qdvcwjhjzx:KzsY5P8JzVuCY60RDmQ1@ec2-107-20-152-105.compute-1.amazonaws.com/qdvcwjhjzx'
+db = SQLAlchemy(app)
 
 
 @app.route('/')
-def index():
-    return redirect(url_for('login'))
+@app.route('/<name>')
+def hello(name=None):
+    return render_template('hello.html', name=name)
 
+class User(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    username = db.Column(db.String(80), unique=True)
+    email = db.Column(db.String(120), unique=True)
 
-@app.route('/login')
-def login():
-    return facebook.authorize(callback=url_for('facebook_authorized',
-        next=request.args.get('next') or request.referrer or None,
-        _external=True))
+    def __init__(self, username, email):
+        self.username = username
+        self.email = email
 
-
-@app.route('/login/authorized')
-@facebook.authorized_handler
-def facebook_authorized(resp):
-    if resp is None:
-        return 'Access denied: reason=%s error=%s' % (
-            request.args['error_reason'],
-            request.args['error_description']
-        )
-    session['oauth_token'] = (resp['access_token'], '')
-    me = facebook.get('/me')
-    return 'Logged in as id=%s name=%s redirect=%s' % \
-        (me.data['id'], me.data['name'], request.args.get('next'))
-
-
-@facebook.tokengetter
-def get_facebook_oauth_token():
-    return session.get('oauth_token')
+    def __repr__(self):
+        return '<User %r>' % self.username
 
 
 if __name__ == '__main__':
