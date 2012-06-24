@@ -8,6 +8,8 @@ Flask-Login, including remember me functionality.
 :copyright: (C) 2011 by Matthew Frazier.
 :license:   MIT/X11, see LICENSE for more details.
 """
+import os
+
 from flask import Flask, request, render_template, redirect, url_for, flash
 from flask.ext.login import (LoginManager, current_user, login_required,
                             login_user, logout_user, UserMixin, AnonymousUser,
