@@ -2,6 +2,8 @@ import os
 
 from flask import Flask
 from flask.ext.sqlalchemy import SQLAlchemy
+from flask import render_template
+
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'postgres://euaczriort:Ko7XOPsbCmqzkDVBlNNO@ec2-184-73-161-119.compute-1.amazonaws.com/euaczriort'
@@ -9,9 +11,9 @@ db = SQLAlchemy(app)
 
 
 @app.route('/')
-def hello():
-    return 'Hello World!'
-
+@app.route('/<name>')
+def hello(name=None):
+    return render_template('hello.html', name=name)
 
 class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
