@@ -1,8 +1,10 @@
 # -*- coding: utf-8 -*-
 
+import flask
 import os
 
 from flask import Flask, request, render_template, redirect, url_for, flash
+from flask.ext.bcrypt import Bcrypt
 from flask.ext.login import (LoginManager, current_user, login_required,
                             login_user, logout_user, UserMixin, AnonymousUser,
                             confirm_login, fresh_login_required)
@@ -12,16 +14,21 @@ from flask import render_template
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'postgres://qdvcwjhjzx:KzsY5P8JzVuCY60RDmQ1@ec2-107-20-152-105.compute-1.amazonaws.com/qdvcwjhjzx'
+bcrypt = Bcrypt(app)
 db = SQLAlchemy(app)
 
 class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(80), unique=True)
     email = db.Column(db.String(120), unique=True)
+    password = db.Column(db.String(60), unique=False)
 
-    def __init__(self, username, email):
+    def __init__(self, username, email, password):
         self.username = username
         self.email = email
+
+		# To validate password later, use bcrypt.check_password_hash(dbpw, pw).
+        self.password = bcrypt.generate_password_hash(password)
 
     def __repr__(self):
         return '<User %r>' % self.username
