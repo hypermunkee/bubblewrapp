@@ -1,5 +1,5 @@
 Flask==0.8
-Flask-Mail==0.6
+Flask-Mail
 Flask-SQLAlchemy==0.16
 Jinja2==2.6
 SQLAlchemy==0.7.8
