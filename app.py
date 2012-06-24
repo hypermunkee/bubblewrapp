@@ -79,8 +79,8 @@ def index():
 
 @app.route("/")
 def dashboard():
-	if current_user:
-		login_manager.reload_user()
+	if current_user.is_authenticated():
+#		login_manager.reload_user()
 		return redirect(url_for("dashboard"))
 	else:
 		return redirect(url_for("index"))
