@@ -19,7 +19,7 @@
                     {% if current_user.is_authenticated() %}
                     Welcome, {{ current_user.name }} | <a href="{{ url_for('logout') }}">Log out</a>
                     {% else %}
-                    <a class="btn btn-primary btn-large" href="{{ url_for('login') }}">Sign me up <i class="icon-play-circle icon-white"></i></a> or <a href="{{ url_for('login') }}">Log me in</a>
+                    <a class="btn btn-primary btn-large" href="{{ url_for('signup') }}">Sign me up <i class="icon-play-circle icon-white"></i></a> or <a href="{{ url_for('login') }}">Log me in</a>
                     {% endif %}
                 </span>
 
