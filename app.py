@@ -79,20 +79,20 @@ class MediaType:
 
 class User(db.Model):
 	__tablename__ = 'user'
-    id = db.Column(db.Integer, primary_key=True)
-    username = db.Column(db.String(80), unique=True)
-    email = db.Column(db.String(120), unique=True)
-    password = db.Column(db.String(60), unique=False)
-    active = db.Column(db.Boolean)
+	id = db.Column(db.Integer, primary_key=True)
+	username = db.Column(db.String(80), unique=True)
+	email = db.Column(db.String(120), unique=True)
+	password = db.Column(db.String(60), unique=False)
+	active = db.Column(db.Boolean)
 
-    def __init__(self, username, email, password):
-        self.username = username
-        self.email = email
-        self.password = password
-        self.active = True
+	def __init__(self, username, email, password):
+		self.username = username
+		self.email = email
+		self.password = password
+		self.active = True
 
-    def __repr__(self):
-        return '<User %r>' % self.username
+	def __repr__(self):
+		return '<User %r>' % self.username
 
 
 class UserLogin(UserMixin):
@@ -106,7 +106,7 @@ class UserLogin(UserMixin):
 
 
 class Anonymous(AnonymousUser):
-    name = u"Anonymous"
+	name = u"Anonymous"
 
 
 SECRET_KEY = "yeah, not actually a secret"
