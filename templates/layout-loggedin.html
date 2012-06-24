@@ -9,6 +9,7 @@
         <script type="text/javascript" src="http://use.typekit.com/jdi1ebj.js"></script>
         <script type="text/javascript">try{Typekit.load();}catch(e){}</script>
         <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+        <script type="text/javascript" src="static/js/jquery.masonry.min.js"></script>
     </head>
     <body>
 
@@ -38,6 +39,17 @@
                             </li>
                             <li class="">
                                 <a href="{{ url_for('logout') }}">Logout</a>
+                            </li>
+                            <li class="dropdown">
+                                <a href="#"
+                                   class="dropdown-toggle"
+                                   data-toggle="dropdown">
+                                    Account
+                                    <b class="caret"></b>
+                                </a>
+                                <ul class="dropdown-menu">
+                                    ...
+                                </ul>
                             </li>
                         </ul>
                     </div>
