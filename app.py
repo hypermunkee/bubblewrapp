@@ -32,7 +32,7 @@ class User(db.Model):
         self.email = email
 
 		# To validate password later, use bcrypt.check_password_hash(dbpw, pw).
-        self.password = bcrypt.generate_password_hash(password)
+        self.password = password
 
     def __repr__(self):
         return '<User %r>' % self.username
@@ -132,16 +132,22 @@ def secret():
 
 @app.route("/signup", methods=["GET", "POST"])
 def signup():
-#	if request.method == "POST":
-	if request.method == "POST" and "email" in request.form:
+	if request.method == "POST" and "username" and "email" and "password" in request.form:
+		username = request.form["username"]
 		email = request.form["email"]
-		flash("Yo you just gotcha self a lil email at %s!" % email)
-		msg = Message("Hello",
-			sender=("Bubblewrapp Admin", "noreply@bubblewrapp.com"),
-			recipients=[email])
-		msg.body = "testing"
-		msg.html = "<b>testing</b>"
-		mail.send(msg)
+		password = bcrypt.generate_password_hash(request.form["password"])
+
+		user = User(username, email, password)
+		db.session.add(user)
+		db.session.commit()
+
+#		flash("Yo you just gotcha self a lil email at %s!" % email)
+#		msg = Message("Hello",
+#			sender=("Bubblewrapp Admin", "noreply@bubblewrapp.com"),
+#			recipients=[email])
+#		msg.body = "testing"
+#		msg.html = "<b>testing</b>"
+#		mail.send(msg)
 	return render_template("signup.html")
 
 
