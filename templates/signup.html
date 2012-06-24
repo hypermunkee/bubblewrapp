@@ -1,16 +1,18 @@
 {% extends "layout.html" %}
 
 {% block body %}
-  <h2>Sign up</h2>
-  <form action="" method=post>
-    <dl>
-      <dt>Username:
-      <dd><input type=text name=username>
-      <dt>Email:
-      <dd><input type=text name=email>
-      <dt>Password:
-      <dd><input type=password name=password>
-      <dd><input type=submit value="Sign me up!">
-    </dl>
-  </form>
+  <div class="row-fluid">
+    <div class="span5">
+        <h2>Sign up for Bubblewrapp</h2>
+        <form action="" method="POST">
+            Username<input type="text" name="username">
+            <br><br>
+            Email&nbsp;&nbsp;&nbsp;&nbsp;<input type="text" name="email">
+            <br><br>
+            Password<input type="password" name="password">
+            <button type="submit" class="btn btn-primary" >Sign up</button>
+        </form>
+        
+    </div>
+</div>
 {% endblock %}
