@@ -80,9 +80,16 @@ def index():
 @app.route("/")
 def dashboard():
 	if current_user:
-		return render_template("dashboard.html")
+		login_manager.reload_user()
+		return redirect(url_for("dashboard"))
 	else:
 		return redirect(url_for("index"))
+
+
+@app.route("/dashboard")
+@login_required
+def dashboard():
+	return render_template("dashboard.html")
 
 
 @app.route('/hello')
