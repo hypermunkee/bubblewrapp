@@ -153,9 +153,17 @@ def signup():
 		email = request.form["email"]
 		password = bcrypt.generate_password_hash(request.form["password"])
 
-		user = User(username, email, password)
-		db.session.add(user)
-		db.session.commit()
+		user = User.query.filter_by(username=username).first()
+		if user:
+			flash(u"Username has already been taken!")
+		else:
+			user = User.query.filter_by(email=email).first()
+			if user:
+				flash(u"An account already exists for the specified email address.")
+			else:
+				user = User(username, email, password)
+				db.session.add(user)
+				db.session.commit()
 
 #		flash("Yo you just gotcha self a lil email at %s!" % email)
 #		msg = Message("Hello",
