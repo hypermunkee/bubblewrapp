@@ -132,7 +132,7 @@ login_manager.setup_app(app)
 
 @app.route("/")
 def home():
-	if current_user.is_authenticated():
+	if current_user and current_user.is_authenticated():
 		return redirect(url_for("dashboard"))
 	else:
 		return redirect(url_for("index"))
