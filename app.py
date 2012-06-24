@@ -125,7 +125,7 @@ def load_user(id):
 	if user:
 		return UserLogin(user)
 	else:
-		return Anonymous
+		return None
 
 
 login_manager.setup_app(app)
