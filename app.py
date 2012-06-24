@@ -6,7 +6,7 @@ from flask import render_template
 
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgres://euaczriort:Ko7XOPsbCmqzkDVBlNNO@ec2-184-73-161-119.compute-1.amazonaws.com/euaczriort'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgres://qdvcwjhjzx:KzsY5P8JzVuCY60RDmQ1@ec2-107-20-152-105.compute-1.amazonaws.com/qdvcwjhjzx'
 db = SQLAlchemy(app)
 
 
