@@ -47,11 +47,6 @@ class UserLogin(UserMixin):
 		self.id = user.id
 		self.active = user.active
 
-#    def __init__(self, name, id, active=True):
-#        self.name = name
-#        self.id = id
-#        self.active = active
-
 	def is_active(self):
 		return self.active
 
@@ -59,14 +54,6 @@ class UserLogin(UserMixin):
 class Anonymous(AnonymousUser):
     name = u"Anonymous"
 
-
-#USERS = {
-#    1: UserLogin(u"Notch", 1),
-#    2: UserLogin(u"Steve", 2),
-#    3: UserLogin(u"Creeper", 3, False),
-#}
-
-#USER_NAMES = dict((u.name, u) for u in USERS.itervalues())
 
 SECRET_KEY = "yeah, not actually a secret"
 DEBUG = True
@@ -101,19 +88,25 @@ def hello(name=None):
 
 @app.route("/login", methods=["GET", "POST"])
 def login():
-    if request.method == "POST" and "username" in request.form:
-        username = request.form["username"]
-        user = User.query.filter_by(username=username).first()
-        if user:#username in USER_NAMES:
-            remember = request.form.get("remember", "no") == "yes"
-            if login_user(UserLogin(user), remember=remember):#USER_NAMES[username], remember=remember):
-                flash("Logged in!")
-                return redirect(request.args.get("next") or url_for("index"))
-            else:
-                flash("Sorry, but you could not log in.")
-        else:
-            flash(u"Invalid username.")
-    return render_template("login.html")
+	if request.method == "POST" and ("username" in request.form and
+    								 "password" in request.form):
+		username = request.form["username"]
+		password = request.form["password"]
+		user = User.query.filter_by(username=username).first()
+		if user:
+			remember = request.form.get("remember", "no") == "yes"
+
+			if bcrypt.check_password_hash(user.password, password):
+				if login_user(UserLogin(user), remember=remember):
+					flash("Logged in!")
+					return redirect(request.args.get("next") or url_for("index"))
+				else:
+					flash("Sorry, but you could not log in.")
+			else:
+				flash("Incorrect password. Please try again.")
+		else:
+			flash(u"Invalid username.")
+	return render_template("login.html")
 
 
 @app.route("/logout")
@@ -142,7 +135,9 @@ def secret():
 
 @app.route("/signup", methods=["GET", "POST"])
 def signup():
-	if request.method == "POST" and "username" and "email" and "password" in request.form:
+	if request.method == "POST" and ("username" in request.form and
+									 "email" in request.form and
+									 "password" in request.form):
 		username = request.form["username"]
 		email = request.form["email"]
 		password = bcrypt.generate_password_hash(request.form["password"])
