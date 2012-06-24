@@ -1,17 +1,46 @@
 <!doctype html>
-<title>Login Demo</title>
-<link rel=stylesheet type=text/css href="{{ url_for('static', filename='style.css') }}">
-<div class=page>
-  <h1>Login Demo</h1>
-  <div class=metanav>
-  {% if current_user.is_authenticated() %}
-    Welcome, {{ current_user.name }} | <a href="{{ url_for('logout') }}">log out</a>
-  {% else %}
-    You are not logged in | <a href="{{ url_for('login') }}">log in</a>
-  {% endif %}
-  </div>
-  {% for message in get_flashed_messages() %}
-    <div class=flash>{{ message }}</div>
-  {% endfor %}
-  {% block body %}{% endblock %}
-</div>
+<html lang="en">
+    <head>
+        <title>Bubblewrapp</title>
+        <link rel=stylesheet type="text/css" href="{{ url_for('static', filename='style.css') }}">
+        <link rel="stylesheet" href="{{ url_for('static', filename='bootstrap.css') }}" type="text/css" media="screen" />
+        <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" type="text/css" media="screen" />
+        <script type="text/javascript" src="{{ url_for('static', filename='bootstrap.js') }}"></script>
+        <script type="text/javascript" src="http://use.typekit.com/jdi1ebj.js"></script>
+<script type="text/javascript">try{Typekit.load();}catch(e){}</script>
+    </head>
+    <body>
+        <div class="row-fluid wrapper">
+            <div class="row">
+                <span class="span4">
+                    <img src="static/images/logo.png" />
+                </span>
+                <span class="span3" style="float:right;margin:20px 0 0 0;">
+                    {% if current_user.is_authenticated() %}
+                    Welcome, {{ current_user.name }} | <a href="{{ url_for('logout') }}">Log out</a>
+                    {% else %}
+                    <a class="btn btn-primary btn-large" href="{{ url_for('login') }}">Sign me up <i class="icon-play-circle icon-white"></i></a> or <a href="{{ url_for('login') }}">Log me in</a>
+                    {% endif %}
+                </span>
+
+
+                
+            </div><br><br>
+            <div class="row">
+                <div class="span8">
+                    {% for message in get_flashed_messages() %}
+                <div class=flash>{{ message }}</div>
+                {% endfor %}
+
+                {% block body %}{% endblock %}
+                </div>
+            </div>
+            {% block body2 %}{% endblock %}
+        </div>
+        <div class="footer">
+            <span class="span4 offset4">
+                &copy;2012 AA Media Lab | All rights reserved.
+            </span>
+        </div>
+    </body>
+</html>

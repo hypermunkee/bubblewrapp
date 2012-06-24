@@ -1,12 +1,42 @@
 {% extends "layout.html" %}
 
 {% block body %}
-<h2>Welcome</h2>
+<h1>Package your curated content like never before. Guaranteed fresh.</h1><br><br>
+
+<p style="background-image: url(static/images/beach.jpg);float: left;
+	-webkit-border-radius: 20px;
+	-moz-border-radius: 20px;
+	border-radius: 20px;
+	-webkit-box-shadow: #000 0 2px 10px;
+	-moz-box-shadow: #000 0 2px 10px;
+	box-shadow: #000 0 2px 10px;">
+	<a href="#">
+		<img src="static/images/beach.jpg" style="opacity: 0;" alt="Beach">
+	</a>
+</p>
 
 {% if current_user.is_authenticated() %}
 <p>You are authorized to access <a href="{{ url_for('secret') }}">the secret information</a>.
 {% else %}
-<p>This Web site contains secret information available only to authorized users.
-Available usernames are Notch, Steve, and Creeper.
+<h3 style="text-align: justify;">Bubblewrapp is a magical new way to curate and share the things you like to the people you love. Bubblewrapp photos and videos of your latest vacation and share them with your girlfriend. Curate a killer playlist of videos and music for that upcoming party.</h3>
 {% endif %}
+
 {% endblock body %}
+
+
+{% block body2 %}
+<br><br>
+            <div class="row">
+                <div class="span4" style="text-align: justify;">
+                     Sustainable banh mi mcsweeney's, bicycle rights scenester pork belly PBR messenger bag synth pop-up portland leggings aesthetic. Salvia direct trade cred, chambray mlkshk pork belly photo booth gluten-free +1 gastropub.  Tattooed keytar wolf pickled, beard semiotics sartorial cred sriracha.
+                    </div>
+                <div class="span4" style="text-align: justify;">
+                    Whatever vegan food truck butcher master cleanse ethnic. Sustainable tumblr helvetica artisan, next level flexitarian seitan truffaut blog. Cred wes anderson yr, 3 wolf moon tattooed pinterest pickled pitchfork VHS pour-over letterpress sustainable mixtape. Seitan before they sold out whatever, skateboard wolf wes anderson selvage pour-over.
+                    </div>
+                <div class="span4" style="text-align: justify;">
+                    Post-ironic squid terry richardson, forage fingerstache butcher viral williamsburg skateboard. Pinterest keytar beard fanny pack. Bicycle rights scenester PBR, small batch echo park banksy odd future gentrify letterpress occupy williamsburg biodiesel marfa.
+                    </div>
+                
+                </div>
+            </div>
+{% endblock body2 %}
