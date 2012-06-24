@@ -80,7 +80,6 @@ def index():
 @app.route("/")
 def home():
 	if current_user.is_authenticated():
-#		login_manager.reload_user()
 		return redirect(url_for("dashboard"))
 	else:
 		return redirect(url_for("index"))
