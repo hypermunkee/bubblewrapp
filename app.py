@@ -1,27 +1,38 @@
 # -*- coding: utf-8 -*-
 
+import flask
 import os
 
 from flask import Flask, request, render_template, redirect, url_for, flash
+from flask.ext.bcrypt import Bcrypt
 from flask.ext.login import (LoginManager, current_user, login_required,
                             login_user, logout_user, UserMixin, AnonymousUser,
                             confirm_login, fresh_login_required)
+from flask.ext.mail import Mail
+from flask.ext.mail import Message
 from flask.ext.sqlalchemy import SQLAlchemy
 from flask import render_template
 
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'postgres://qdvcwjhjzx:KzsY5P8JzVuCY60RDmQ1@ec2-107-20-152-105.compute-1.amazonaws.com/qdvcwjhjzx'
+bcrypt = Bcrypt(app)
 db = SQLAlchemy(app)
+mail = Mail(app)
+
 
 class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(80), unique=True)
     email = db.Column(db.String(120), unique=True)
+    password = db.Column(db.String(60), unique=False)
 
-    def __init__(self, username, email):
+    def __init__(self, username, email, password):
         self.username = username
         self.email = email
+
+		# To validate password later, use bcrypt.check_password_hash(dbpw, pw).
+        self.password = bcrypt.generate_password_hash(password)
 
     def __repr__(self):
         return '<User %r>' % self.username
@@ -73,10 +84,10 @@ def index():
     return render_template("index.html")
 
 
-@app.route("/secret")
-@fresh_login_required
-def secret():
-    return render_template("secret.html")
+@app.route('/hello')
+@app.route('/<name>')
+def hello(name=None):
+    return render_template('hello.html', name=name)
 
 
 @app.route("/login", methods=["GET", "POST"])
@@ -95,6 +106,14 @@ def login():
     return render_template("login.html")
 
 
+@app.route("/logout")
+@login_required
+def logout():
+    logout_user()
+    flash("Logged out.")
+    return redirect(url_for("index"))
+
+
 @app.route("/reauth", methods=["GET", "POST"])
 @login_required
 def reauth():
@@ -105,18 +124,25 @@ def reauth():
     return render_template("reauth.html")
 
 
-@app.route("/logout")
-@login_required
-def logout():
-    logout_user()
-    flash("Logged out.")
-    return redirect(url_for("index"))
+@app.route("/secret")
+@fresh_login_required
+def secret():
+    return render_template("secret.html")
 
 
-@app.route('/')
-@app.route('/<name>')
-def hello(name=None):
-    return render_template('hello.html', name=name)
+@app.route("/signup", methods=["GET", "POST"])
+def signup():
+#	if request.method == "POST":
+	if request.method == "POST" and "email" in request.form:
+		email = request.form["email"]
+		flash("Yo you just gotcha self a lil email at %s!" % email)
+		msg = Message("Hello",
+			sender=("Bubblewrapp Admin", "noreply@bubblewrapp.com"),
+			recipients=[email])
+		msg.body = "testing"
+		msg.html = "<b>testing</b>"
+		mail.send(msg)
+	return render_template("signup.html")
 
 
 if __name__ == '__main__':
