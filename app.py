@@ -72,11 +72,6 @@ def load_user(id):
 
 login_manager.setup_app(app)
 
-@app.route("/welcome")
-def index():
-    return render_template("index.html")
-
-
 @app.route("/")
 def home():
 	if current_user.is_authenticated():
@@ -89,12 +84,6 @@ def home():
 @login_required
 def dashboard():
 	return render_template("dashboard.html")
-
-
-@app.route('/hello')
-@app.route('/<name>')
-def hello(name=None):
-    return render_template('hello.html', name=name)
 
 
 @app.route("/login", methods=["GET", "POST"])
@@ -110,7 +99,7 @@ def login():
 			if bcrypt.check_password_hash(user.password, password):
 				if login_user(UserLogin(user), remember=remember):
 					flash("Logged in!")
-					return redirect(request.args.get("next") or url_for("index"))
+					return redirect(request.args.get("next") or url_for("dashboard"))
 				else:
 					flash("Sorry, but you could not log in.")
 			else:
@@ -179,6 +168,14 @@ def signup():
 #		msg.html = "<b>testing</b>"
 #		mail.send(msg)
 	return render_template("signup.html")
+
+
+@app.route("/welcome")
+def index():
+	if current_user.is_authenticated():
+		return redirect(url_for("dashboard"))
+	else:
+	    return render_template("index.html")
 
 
 if __name__ == '__main__':
