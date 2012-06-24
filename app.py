@@ -33,7 +33,7 @@ class Bundle(db.Model):
 	def __init__(self, title, description):
 		self.title = title
 		self.description = description
-		self.hash = _GenerateHash()
+		self.hash = self._GenerateHash()
 
 	def __repr__(self):
 		return '<Bundle ID %r: %r>' % (self.id, self.title)
@@ -48,7 +48,7 @@ class Bundle(db.Model):
 		# If the generated hash has already been used, try again.
 		existing_hash = Bundle.query.filter_by(hash=hash).first()
 		if existing_hash:
-			return _GenerateHash()
+			return self._GenerateHash()
 
 		return hash
 
@@ -122,7 +122,10 @@ login_manager.refresh_view = "reauth"
 @login_manager.user_loader
 def load_user(id):
 	user = User.query.filter_by(id=id).first()
-	return UserLogin(user)
+	if user:
+		return UserLogin(user)
+	else:
+		return Anonymous
 
 
 login_manager.setup_app(app)
