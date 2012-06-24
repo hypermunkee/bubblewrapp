@@ -1,6 +1,5 @@
 Flask==0.8
 Flask-SQLAlchemy==0.16
-Flask-Security==1.2.3
 SQLAlchemy==0.7.8
 Jinja2==2.6
 Werkzeug==0.8.3
@@ -8,3 +7,4 @@ distribute==0.6.24
 wsgiref==0.1.2
 psycopg2==2.4.5
 flask-login
+flask-bcrypt==0.5.2
