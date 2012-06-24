@@ -54,4 +54,10 @@ body {
 	-webkit-box-shadow: #000 0 2px 10px;
 	-moz-box-shadow: #000 0 2px 10px;
 	box-shadow: #000 0 2px 10px;
+          width: 220px;
+
+}
+
+.typekit-badge {
+    display:none;
 }
