@@ -5,11 +5,12 @@
         <link rel=stylesheet type="text/css" href="{{ url_for('static', filename='style.css') }}">
         <link rel="stylesheet" href="{{ url_for('static', filename='bootstrap.css') }}" type="text/css" media="screen" />
         <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" type="text/css" media="screen" />
-        <script type="text/javascript" src="{{ url_for('static', filename='bootstrap.js') }}"></script>
         <script type="text/javascript" src="http://use.typekit.com/jdi1ebj.js"></script>
         <script type="text/javascript">try{Typekit.load();}catch(e){}</script>
         <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
         <script type="text/javascript" src="static/js/jquery.masonry.min.js"></script>
+        <script type="text/javascript" src="static/bootstrap.min.js"></script>
+
     </head>
     <body>
         <div class="navbar navbar-fixed-top">
@@ -22,7 +23,7 @@
                     </a>
                     <div class="nav-collapse">
                         <ul class="nav">
-                            <li class=""><a href="/"><img src="static/images/logo-small.png" height="30px"></a></li>
+                            <li class=""><a href="/"><img src="static/images/logo-small.png" height="20px"></a></li>
 
                             <li><a href="#">Explore</a></li>
                             <li><a href="#">Popular</a></li>
@@ -41,7 +42,7 @@
                                     <li><a href="#">Profile</a></li>
                                     <li><a href="#">Settings</a></li>
                                     <li class="divider"></li>
-                                    <li><a href="{{ url_for('logout') }}">Logout</a></li>
+                                    <li><a href="#">Logout</a></li>
                                 </ul>
                             </li>
                         </ul>
