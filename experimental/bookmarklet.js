@@ -23,3 +23,23 @@ javascript:void((function() {
 		displayModalWindow();
 	}
 })());
+
+
+javascript:void((function() {
+	var grabYouTubeId = function() {
+		return 99;
+	};
+
+	var displayModalWindow = function() {
+		var ytId = grabYouTubeId(); alert("Found ID: " + ytId);
+	};
+
+	if (!($ = window.jQuery)) { // typeof jQuery=='undefined' works too
+		script = document.createElement('script');
+		script.src = 'http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js';
+		script.onload=displayModalWindow;
+		document.body.appendChild(script);
+	} else {
+		displayModalWindow();
+	}
+})());
