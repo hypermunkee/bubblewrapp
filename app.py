@@ -3,6 +3,7 @@
 import flask
 import os
 import random
+import re
 
 from flask import Flask, request, render_template, redirect, url_for, flash
 from flask.ext.bcrypt import Bcrypt
@@ -140,6 +141,36 @@ def home():
 		return redirect(url_for("dashboard"))
 	else:
 		return redirect(url_for("index"))
+
+
+@app.route("/testaddmedia")
+def test_add_media():
+	add_media()
+	return render_template("index.html")
+
+#@app.route("/addmedia", methods=["POST"])
+def add_media():
+	bundle_id = 1 #request.form["bundleid"]
+	media_url = 'http://www.youtube.com/v/E3wIJ774gJs&modestbranding=1&iv_load_policy=3&amp;autoplay=1&amp;modestbranding=1' #request.form["url"]
+	media_type = get_media_type(media_url)
+	if not media_type:
+		return  # TODO(awong): Error handling.
+	elif media_type == MediaType.VIDEO:
+		media_thumb_url = 'http://img.youtube.com/vi/E3wIJ774gJs/0.jpg'  # TODO(awong): Finish this.
+	elif media_type == MediaType.IMAGE:
+		media_thumb_url = ''  # TODO(awong): Finish this.
+
+	new_media = Media(bundle_id, media_url, media_thumb_url, media_type)
+	db.session.add(new_media)
+	db.session.commit()
+
+
+def get_media_type(url):
+	youtube_matcher = re.compile('^http:\/\/(?:www\.)?youtube.com\/watch\?(?=[^?]*v=\w+)(?:[^\s?]+)?$')
+	if youtube_matcher.match(url):
+		return MediaType.VIDEO
+
+	return None
 
 
 @app.route("/dashboard")
