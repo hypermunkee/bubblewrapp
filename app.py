@@ -161,6 +161,7 @@ def add_media():
 		media_thumb_url = ''  # TODO(awong): Finish this.
 
 	new_media = Media(bundle_id, media_url, media_thumb_url, media_type)
+	print 'adding media %r' % new_media
 	db.session.add(new_media)
 	db.session.commit()
 
