@@ -154,15 +154,14 @@ def add_media():
 	media_url = 'http://www.youtube.com/v/E3wIJ774gJs&modestbranding=1&iv_load_policy=3&amp;autoplay=1&amp;modestbranding=1' #request.form["url"]
 	media_type = MediaType.VIDEO #get_media_type(media_url)
 	media_thumb_url = 'http://img.youtube.com/vi/E3wIJ774gJs/0.jpg'
-#	if not media_type:
-#		return  # TODO(awong): Error handling.
+	if not media_type:
+		raise Exception('Could not determine media type.')
 #	elif media_type == MediaType.VIDEO:
 #		media_thumb_url = 'http://img.youtube.com/vi/E3wIJ774gJs/0.jpg'  # TODO(awong): Finish this.
 #	elif media_type == MediaType.IMAGE:
 #		media_thumb_url = ''  # TODO(awong): Finish this.
 
 	new_media = Media(bundle_id, media_url, media_thumb_url, media_type)
-	print 'adding media %r' % new_media
 	db.session.add(new_media)
 	db.session.commit()
 
