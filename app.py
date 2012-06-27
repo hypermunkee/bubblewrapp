@@ -40,7 +40,8 @@ class Bundle(db.Model):
 		self.hash = self._GenerateHash()
 
 	def __repr__(self):
-		return '<Bundle: id=%r, owner_id=%r, title=%r, hash=%r>' % (self.id, self.owner_id, self.title, self.hash)
+		return '<Bundle: id=%r, owner_id=%r, title=%r, hash=%r>' % (
+			self.id, self.owner_id, self.title, self.hash)
 
 	def _GenerateHash(self):
 		char_set = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890-_';
@@ -72,7 +73,8 @@ class Media(db.Model):
 		self.type = type
 
 	def __repr__(self):
-		return '<Media ID %r: %r>' % (self.id, self.url)
+		return '<Media: id=%r, bundle_id=%r, url=%r, thumburl=%r, type=%r>' % (
+			self.id, self.bundle_id, self.url, self.thumburl, self.type)
 
 
 class MediaType:
@@ -95,7 +97,8 @@ class User(db.Model):
 		self.active = True
 
 	def __repr__(self):
-		return '<User %r>' % self.username
+		return '<User: id=%r, username=%r, email=%r, active=%r>' % (
+			self.id, self.username, self.email, self.active)
 
 
 class UserLogin(UserMixin):
