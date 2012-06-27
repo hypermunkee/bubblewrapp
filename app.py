@@ -28,7 +28,7 @@ class Bundle(db.Model):
 	__tablename__ = 'bundle'
 	id = db.Column(db.Integer, primary_key=True)
 	owner_id = db.Column(db.Integer, db.ForeignKey('user.id'))
-	title = db.String(150)
+	title = db.Column(db.String(150))
 	description = db.Column(db.Text)
 	hash = db.Column(db.String(60))
 	children = relationship('Media')
@@ -40,7 +40,7 @@ class Bundle(db.Model):
 		self.hash = self._GenerateHash()
 
 	def __repr__(self):
-		return '<Bundle:id=%r,owner_id=%r,title="%r",hash="%r">' % (self.id, self.owner_id, self.title, self.hash)
+		return '<Bundle: id=%r, owner_id=%r, title=%r, hash=%r>' % (self.id, self.owner_id, self.title, self.hash)
 
 	def _GenerateHash(self):
 		char_set = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890-_';
