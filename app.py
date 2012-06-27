@@ -176,8 +176,11 @@ def get_media_type(url):
 	return None
 
 
-def get_user_bundles():
-	return Bundle.query.filter_by(owner_id=current_user.id)
+@app.context_processor
+def utility_processor():
+	def get_user_bundles():
+		return Bundle.query.filter_by(owner_id=current_user.id)
+	return dict(get_user_bundles=get_user_bundles)
 
 
 @app.route("/dashboard")
