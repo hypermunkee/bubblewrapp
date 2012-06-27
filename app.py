@@ -154,7 +154,7 @@ def add_media():
 		media_type = get_media_type(media_url)
 		if not media_type:
 			flash('Could not determine media type.')
-			return make_response(render_template('addmedia.html'), 404)
+			return make_response(render_template('addmedia.html'), 400)
 		elif media_type == MediaType.VIDEO:
 			media_thumb_url = request.form["thumburl"]
 		elif media_type == MediaType.IMAGE:
