@@ -112,10 +112,10 @@ class UserLogin(UserMixin):
 
 
 class Anonymous(AnonymousUser):
-	name = u"Anonymous"
+	name = u'Anonymous'
 
 
-SECRET_KEY = "yeah, not actually a secret"
+SECRET_KEY = 'yeah, not actually a secret'
 DEBUG = True
 
 app.config.from_object(__name__)
@@ -123,9 +123,9 @@ app.config.from_object(__name__)
 login_manager = LoginManager()
 
 login_manager.anonymous_user = Anonymous
-login_manager.login_view = "login"
-login_manager.login_message = u"Please log in to access this page."
-login_manager.refresh_view = "reauth"
+login_manager.login_view = 'login'
+login_manager.login_message = u'Please log in to access this page.'
+login_manager.refresh_view = 'reauth'
 
 @login_manager.user_loader
 def load_user(id):
@@ -138,36 +138,36 @@ def load_user(id):
 
 login_manager.setup_app(app)
 
-@app.route("/")
+@app.route('/')
 def home():
 	if current_user and current_user.is_authenticated():
-		return redirect(url_for("dashboard"))
+		return redirect(url_for('dashboard'))
 	else:
-		return redirect(url_for("index"))
+		return redirect(url_for('index'))
 
 
-@app.route("/addmedia", methods=["GET", "POST"])
+@app.route('/addmedia', methods=['GET', 'POST'])
 @login_required
 def add_media():
-	if request.method == "POST" and ("bundleid" in request.form and
-									 "url" in request.form and
-									 "thumburl" in request.form):
-		bundle_id = request.form["bundleid"]
-		media_url = request.form["url"]
+	if request.method == 'POST' and ('bundleid' in request.form and
+									 'url' in request.form and
+									 'thumburl' in request.form):
+		bundle_id = request.form['bundleid']
+		media_url = request.form['url']
 		media_type = get_media_type(media_url)
 		if not media_type:
 			flash('Could not determine media type.')
 			return make_response(render_template('addmedia.html'), 400)
 		elif media_type == MediaType.VIDEO:
-			media_thumb_url = request.form["thumburl"]
+			media_thumb_url = request.form['thumburl']
 		elif media_type == MediaType.IMAGE:
-			media_thumb_url = request.form["thumburl"]
+			media_thumb_url = request.form['thumburl']
 
 		new_media = Media(bundle_id, media_url, media_thumb_url, media_type)
 		db.session.add(new_media)
 		db.session.commit()
-		flash("Media was successfully added!")
-		return redirect(url_for("dashboard"))
+		flash('Media was successfully added!')
+		return redirect(url_for('dashboard'))
 	else:
 		return render_template('addmedia.html')
 
@@ -186,91 +186,92 @@ def utility_processor():
 	return dict(get_user_bundles=get_user_bundles)
 
 
-@app.route("/createbundle", methods=["GET", "POST"])
+@app.route('/createbundle', methods=['GET', 'POST'])
+@login_required
 def create_bundle():
-	if request.method == "POST" and ("title" in request.form and
-									 "description" in request.form):
-		title = request.form["title"]
-		description = request.form["description"]
+	if request.method == 'POST' and ('title' in request.form and
+									 'description' in request.form):
+		title = request.form['title']
+		description = request.form['description']
 
 		new_bundle = Bundle(current_user.id, title, description)
 		db.session.add(new_bundle)
 		db.session.commit()
-		flash("Bundle was successfully created!")
-		return redirect(url_for("dashboard"))
+		flash('Bundle was successfully created!')
+		return redirect(url_for('dashboard'))
 	else:
 		return render_template('createbundle.html')
 
 
-@app.route("/dashboard")
+@app.route('/dashboard')
 @login_required
 def dashboard():
-	return render_template("dashboard.html")
+	return render_template('dashboard.html')
 
 
-@app.route("/login", methods=["GET", "POST"])
+@app.route('/login', methods=['GET', 'POST'])
 def login():
-	if request.method == "POST" and ("username" in request.form and
-    								 "password" in request.form):
-		username = request.form["username"]
-		password = request.form["password"]
+	if request.method == 'POST' and ('username' in request.form and
+    								 'password' in request.form):
+		username = request.form['username']
+		password = request.form['password']
 		user = User.query.filter_by(username=username).first()
 		if user:
-			remember = request.form.get("remember", "no") == "yes"
+			remember = request.form.get('remember', 'no') == 'yes'
 
 			if bcrypt.check_password_hash(user.password, password):
 				if login_user(UserLogin(user), remember=remember):
-					flash("Logged in!")
-					return redirect(request.args.get("next") or url_for("dashboard"))
+					flash('Logged in!')
+					return redirect(request.args.get('next') or url_for('dashboard'))
 				else:
-					flash("Sorry, but you could not log in.")
+					flash('Sorry, but you could not log in.')
 			else:
-				flash("Incorrect password. Please try again.")
+				flash('Incorrect password. Please try again.')
 		else:
-			flash(u"Invalid username.")
-	return render_template("login.html")
+			flash(u'Invalid username.')
+	return render_template('login.html')
 
 
-@app.route("/logout")
+@app.route('/logout')
 @login_required
 def logout():
     logout_user()
-    flash("Logged out.")
-    return redirect(url_for("index"))
+    flash('Logged out.')
+    return redirect(url_for('index'))
 
 
-@app.route("/reauth", methods=["GET", "POST"])
+@app.route('/reauth', methods=['GET', 'POST'])
 @login_required
 def reauth():
-    if request.method == "POST":
+    if request.method == 'POST':
         confirm_login()
-        flash(u"Reauthenticated.")
-        return redirect(request.args.get("next") or url_for("index"))
-    return render_template("reauth.html")
+        flash(u'Reauthenticated.')
+        return redirect(request.args.get('next') or url_for('index'))
+    return render_template('reauth.html')
 
 
-@app.route("/secret")
+@app.route('/secret')
 @fresh_login_required
 def secret():
-    return render_template("secret.html")
+    return render_template('secret.html')
 
 
-@app.route("/signup", methods=["GET", "POST"])
+@app.route('/signup', methods=['GET', 'POST'])
 def signup():
-	if request.method == "POST" and ("username" in request.form and
-									 "email" in request.form and
-									 "password" in request.form):
-		username = request.form["username"]
-		email = request.form["email"]
-		password = bcrypt.generate_password_hash(request.form["password"])
+	if request.method == 'POST' and ('username' in request.form and
+									 'email' in request.form and
+									 'password' in request.form):
+		username = request.form['username']
+		email = request.form['email']
+		password = bcrypt.generate_password_hash(request.form['password'])
 
 		user = User.query.filter_by(username=username).first()
 		if user:
-			flash(u"Username has already been taken!")
+			flash(u'Username has already been taken!')
 		else:
 			user = User.query.filter_by(email=email).first()
 			if user:
-				flash(u"An account already exists for the specified email address.")
+				flash(u'An account already exists for the specified email address.')
 			else:
 				user = User(username, email, password)
 				db.session.add(user)
@@ -278,26 +279,26 @@ def signup():
 
 				# Log the user in right after sign-up.
 				if login_user(UserLogin(user)):
-					return redirect(url_for("dashboard"))
+					return redirect(url_for('dashboard'))
 				else:
-					return redirect(url_for("index"))
+					return redirect(url_for('index'))
 
-#		flash("Yo you just gotcha self a lil email at %s!" % email)
-#		msg = Message("Hello",
-#			sender=("Bubblewrapp Admin", "noreply@bubblewrapp.com"),
+#		flash('Yo you just gotcha self a lil email at %s!' % email)
+#		msg = Message('Hello',
+#			sender=('Bubblewrapp Admin', 'noreply@bubblewrapp.com'),
 #			recipients=[email])
-#		msg.body = "testing"
-#		msg.html = "<b>testing</b>"
+#		msg.body = 'testing'
+#		msg.html = '<b>testing</b>'
 #		mail.send(msg)
-	return render_template("signup.html")
+	return render_template('signup.html')
 
 
-@app.route("/welcome")
+@app.route('/welcome')
 def index():
 	if current_user.is_authenticated():
-		return redirect(url_for("dashboard"))
+		return redirect(url_for('dashboard'))
 	else:
-	    return render_template("index.html")
+	    return render_template('index.html')
 
 
 if __name__ == '__main__':
