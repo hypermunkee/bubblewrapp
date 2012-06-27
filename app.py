@@ -166,7 +166,7 @@ def add_media():
 		flash("Media was successfully added!")
 		return redirect(url_for("dashboard"))
 	else:
-		return render_template("addmedia.html")
+		return render_template('addmedia.html')
 
 
 def get_media_type(url):
@@ -174,6 +174,10 @@ def get_media_type(url):
 	if youtube_matcher.match(url):
 		return MediaType.VIDEO
 	return None
+
+
+def get_user_bundles():
+	return Bundle.query.filter_by(owner_id=current_user.id)
 
 
 @app.route("/dashboard")
