@@ -151,9 +151,10 @@ def add_media():
 									 "thumburl" in request.form):
 		bundle_id = request.form["bundleid"]
 		media_url = request.form["url"]
-		media_type = MediaType.VIDEO #get_media_type(media_url)
+		media_type = get_media_type(media_url)
 		if not media_type:
-			raise Exception('Could not determine media type.')
+			flash('Could not determine media type.')
+			return make_response(render_template('addmedia.html'), 404)
 		elif media_type == MediaType.VIDEO:
 			media_thumb_url = request.form["thumburl"]
 		elif media_type == MediaType.IMAGE:
