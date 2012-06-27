@@ -1,0 +1,17 @@
+{% extends "layout.html" %}
+
+{% block body %}
+  <div class="row-fluid">
+    <div class="span5">
+        <h2>Submit new media</h2>
+        <form action="" method="POST">
+            Bundle ID<input type="text" name="bundleid">
+            <br><br>
+            URL&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="text" name="url">
+            <br><br>
+            Thumbnail URL<input type="text" name="thumburl">
+            <button type="submit" class="btn btn-primary" >Submit</button>
+        </form>
+    </div>
+</div>
+{% endblock %}

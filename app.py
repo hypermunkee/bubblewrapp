@@ -143,27 +143,29 @@ def home():
 		return redirect(url_for("index"))
 
 
-@app.route("/testaddmedia")
-def test_add_media():
-	add_media()
-	return render_template("index.html")
-
-#@app.route("/addmedia", methods=["POST"])
+@app.route("/addmedia", methods=["GET", "POST"])
+@login_required
 def add_media():
-	bundle_id = 1 #request.form["bundleid"]
-	media_url = 'http://www.youtube.com/v/E3wIJ774gJs&modestbranding=1&iv_load_policy=3&amp;autoplay=1&amp;modestbranding=1' #request.form["url"]
-	media_type = MediaType.VIDEO #get_media_type(media_url)
-#	media_thumb_url = 'http://img.youtube.com/vi/E3wIJ774gJs/0.jpg'
-	if not media_type:
-		raise Exception('Could not determine media type.')
-	elif media_type == MediaType.VIDEO:
-		media_thumb_url = 'http://img.youtube.com/vi/E3wIJ774gJs/0.jpg'  # TODO(awong): Finish this.
-	elif media_type == MediaType.IMAGE:
-		media_thumb_url = ''  # TODO(awong): Finish this.
+	if request.method == "POST" and ("bundleid" in request.form and
+									 "url" in request.form and
+									 "thumburl" in request.form):
+		bundle_id = request.form["bundleid"]
+		media_url = request.form["url"]
+		media_type = MediaType.VIDEO #get_media_type(media_url)
+		if not media_type:
+			raise Exception('Could not determine media type.')
+		elif media_type == MediaType.VIDEO:
+			media_thumb_url = request.form["thumburl"]
+		elif media_type == MediaType.IMAGE:
+			media_thumb_url = request.form["thumburl"]
 
-	new_media = Media(bundle_id, media_url, media_thumb_url, media_type)
-	db.session.add(new_media)
-	db.session.commit()
+		new_media = Media(bundle_id, media_url, media_thumb_url, media_type)
+		db.session.add(new_media)
+		db.session.commit()
+		flash("Media was successfully added!")
+		return redirect(url_for("dashboard"))
+	else:
+		return render_template("addmedia.html")
 
 
 def get_media_type(url):
