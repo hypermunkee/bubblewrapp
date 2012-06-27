@@ -33,14 +33,14 @@ class Bundle(db.Model):
 	hash = db.Column(db.String(60))
 	children = relationship('Media')
 
-	def __init__(self, bundle_id, title, description):
-		self.bundle_id = bundle_id
+	def __init__(self, owner_id, title, description):
+		self.owner_id = owner_id
 		self.title = title
 		self.description = description
 		self.hash = self._GenerateHash()
 
 	def __repr__(self):
-		return '<Bundle ID %r: %r>' % (self.id, self.title)
+		return '<Bundle:id=%r,owner_id=%r,title="%r",hash="%r">' % (self.id, self.owner_id, self.title, self.hash)
 
 	def _GenerateHash(self):
 		char_set = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890-_';
