@@ -5,7 +5,7 @@ import os
 import random
 import re
 
-from flask import Flask, request, render_template, redirect, url_for, flash
+from flask import Flask, make_response, request, render_template, redirect, url_for, flash
 from flask.ext.bcrypt import Bcrypt
 from flask.ext.login import (LoginManager, current_user, login_required,
                             login_user, logout_user, UserMixin, AnonymousUser,
