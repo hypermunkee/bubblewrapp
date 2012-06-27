@@ -186,6 +186,22 @@ def utility_processor():
 	return dict(get_user_bundles=get_user_bundles)
 
 
+@app.route("/createbundle", methods=["GET", "POST"])
+def create_bundle():
+	if request.method == "POST" and ("title" in request.form and
+									 "description" in request.form):
+		title = request.form["title"]
+		description = request.form["description"]
+
+		new_bundle = Bundle(current_user.id, title, description)
+		db.session.add(new_bundle)
+		db.session.commit()
+		flash("Bundle was successfully created!")
+		return redirect(url_for("dashboard"))
+	else:
+		return render_template('createbundle.html')
+
+
 @app.route("/dashboard")
 @login_required
 def dashboard():
