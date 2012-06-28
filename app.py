@@ -17,11 +17,29 @@ from sqlalchemy.orm import relationship
 from flask import render_template
 
 
+_DEBUG_ = False
+
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgres://qdvcwjhjzx:KzsY5P8JzVuCY60RDmQ1@ec2-107-20-152-105.compute-1.amazonaws.com/qdvcwjhjzx'
+app.config['SQLALCHEMY_DATABASE_URI'] = ('sqlite:///:memory:' if _DEBUG_ else
+	'postgres://qdvcwjhjzx:KzsY5P8JzVuCY60RDmQ1@ec2-107-20-152-105.compute-1.amazonaws.com/qdvcwjhjzx')
 bcrypt = Bcrypt(app)
 db = SQLAlchemy(app)
 #mail = Mail(app)
+
+
+@app.before_first_request
+def before_first_request():
+	if not _DEBUG_:
+		return
+
+	db.create_all()
+
+	user1 = User('ace', 'andrewchhwong@gmail.com', bcrypt.generate_password_hash('asdf'))
+	user2 = User('andrewboni', 'andrewfboni@gmail.com', bcrypt.generate_password_hash('asdf'))
+	db.session.add(user1)
+	db.session.add(user2)
+
+	db.session.commit()
 
 
 class Bundle(db.Model):
